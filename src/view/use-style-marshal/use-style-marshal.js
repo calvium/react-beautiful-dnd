@@ -29,15 +29,17 @@ export default function useStyleMarshal(contextId: ContextId, nonce?: string) {
   const alwaysRef = useRef<?HTMLStyleElement>(null);
   const dynamicRef = useRef<?HTMLStyleElement>(null);
 
-  const setDynamicStyle = useCallback(
+  const setDynamicStyle = useRef((proposed: string) => {
+    const el: ?HTMLStyleElement = dynamicRef.current;
     // Using memoizeOne to prevent frequent updates to textContext
-    memoizeOne((proposed: string) => {
-      const el: ?HTMLStyleElement = dynamicRef.current;
-      invariant(el, 'Cannot set dynamic style element if it is not set');
-      el.textContent = proposed;
-    }),
-    [],
-  );
+    const memoizedSetDynamicStyle = memoizeOne(
+      (proposed: string, el: ?HTMLStyleElement) => {
+        invariant(el, 'Cannot set dynamic style element if it is not set');
+        el.textContent = proposed;
+      },
+    );
+    memoizedSetDynamicStyle(proposed, el);
+  }).current;
 
   const setAlwaysStyle = useCallback((proposed: string) => {
     const el: ?HTMLStyleElement = alwaysRef.current;
@@ -91,10 +93,10 @@ export default function useStyleMarshal(contextId: ContextId, nonce?: string) {
     contextId,
   ]);
 
-  const dragging = useCallback(() => setDynamicStyle(styles.dragging), [
-    setDynamicStyle,
-    styles.dragging,
-  ]);
+  const dragging = useCallback(
+    () => setDynamicStyle(styles.dragging),
+    [setDynamicStyle, styles.dragging],
+  );
   const dropping = useCallback(
     (reason: DropReason) => {
       if (reason === 'DROP') {
