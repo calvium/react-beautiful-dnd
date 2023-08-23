@@ -1,6 +1,6 @@
 {
   "name": "@calvium/react-beautiful-dnd",
-  "version": "13.1.2",
+  "version": "13.1.3",
   "description": "Beautiful and accessible drag and drop for lists with React",
   "author": "Alex Reardon <areardon@atlassian.com>",
   "keywords": [
