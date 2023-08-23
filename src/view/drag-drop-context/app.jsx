@@ -173,12 +173,9 @@ export default function App(props: Props) {
     ],
   );
 
-  // Checking for unexpected store changes
-  if (process.env.NODE_ENV !== 'production') {
-    if (lazyStoreRef.current && lazyStoreRef.current !== store) {
-      warning('unexpected store change');
-    }
-  }
+  // There used to be a check here to make sure that the store was not recreated, but
+  // I've had to nuke that because the component can be unmounted and remounted, and to
+  // get *that* to work cleanly I've made remounting the component create a fresh store.
 
   // assigning lazy store ref
   lazyStoreRef.current = store;
