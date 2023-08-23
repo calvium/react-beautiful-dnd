@@ -1,3 +1,13 @@
+# Build instructions:
+
+```
+yarn install
+env NODE_OPTIONS=--openssl-legacy-provider yarn build
+```
+
+# This fork
+
+- Attempt to fix compatibility with React 18.
 
 ## ⚠️ Maintenance & support
 
